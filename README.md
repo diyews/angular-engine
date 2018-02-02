@@ -3,8 +3,7 @@ This repository provide a basic config for building a angular project. Use this 
 
 Thanks to [angular](https://github.com/angular/angular), [angular-starter](https://github.com/gdi2290/angular-starter).
 
-## Branch: JIT-in-dev
-When there is AOT-in-dev on master, this branch for favor in JIT-in-dev user.
+If you prefer AOT in dev, there is an AOT-in-dev branch.
 
 what's different between AOT & JIT compilation:
 
