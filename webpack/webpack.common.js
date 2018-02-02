@@ -7,6 +7,7 @@ const DefinePlugin = require('webpack/lib/DefinePlugin');
 const CommonsChunkPlugin = require('webpack/lib/optimize/CommonsChunkPlugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 const helpers = require('./helpers');
 
@@ -55,17 +56,6 @@ module.exports = function (options) {
         module: {
             
             rules: [
-                // ...ngcWebpackConfig.loaders,
-                
-                /*{
-                    test: /\.tsx?$/,
-                    loaders: [
-                        {
-                            loader: 'awesome-typescript-loader',
-                            options: { configFileName: helpers.root('tsconfig.json') }
-                        }
-                    ]
-                },*/
                 {
                     test: /(?:\.ngfactory\.js|\.ngstyle\.js|\.ts)$/,
                     use: ['@angular-devkit/build-optimizer/webpack-loader', {
@@ -100,10 +90,18 @@ module.exports = function (options) {
                 /**
                  * global style
                  */
-                {
+                /*{
                     test: /\.scss$/,
                     include: [helpers.root('./app/style.scss'), helpers.root('./app/styles')],
                     use: ['style-loader', 'css-loader', 'sass-loader'],
+                },*/
+                {
+                    test: /\.scss$/,
+                    include: [helpers.root('./app/style.scss'), helpers.root('./app/styles')],
+                    use: ExtractTextPlugin.extract({
+                        fallback: 'style-loader',
+                        use: ['css-loader', 'sass-loader']
+                    })
                 },
 
                 /**
@@ -157,6 +155,8 @@ module.exports = function (options) {
                 'process.env.HMR': METADATA.HMR
             }),
 
+            new ExtractTextPlugin('[name].[chunkhash].css'),
+
             /**
              * Plugin: CommonsChunkPlugin
              * Description: Shares common code between the pages.
@@ -203,7 +203,7 @@ module.exports = function (options) {
                     return order.indexOf(a.names[0]) - order.indexOf(b.names[0]);
                 }
             }),
-    
+
             /**
              * copy assets
              */

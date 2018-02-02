@@ -9,6 +9,9 @@ const AngularCompilerPlugin = require('@ngtools/webpack').AngularCompilerPlugin;
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const CleanWebpackPlugin = require('clean-webpack-plugin');
+
+const TryPlugin = require('./plugins/try');
+
 const helpers = require('./helpers');
 
 const env = process.env.NODE_ENV;
@@ -35,7 +38,9 @@ module.exports = function () { /* ... */
             new CleanWebpackPlugin(['output'], {root: helpers.root()}),
 
             // production bundle analyze
-            new BundleAnalyzerPlugin({ analyzerPort: 8085, openAnalyzer: false })
+            // new BundleAnalyzerPlugin({ analyzerPort: 8085, openAnalyzer: false })
+
+            new TryPlugin()
         ],
         node: {
             buffer: false
