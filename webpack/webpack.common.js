@@ -23,7 +23,7 @@ module.exports = function (options) {
     const entry = {
         polyfills: './app/polyfills.browser.ts',
         main:      './app/index.ts',
-        style:     './app/style.scss'
+        inline:     './app/style.scss'
     };
     
     return {
@@ -155,7 +155,7 @@ module.exports = function (options) {
                 'process.env.HMR': METADATA.HMR
             }),
 
-            new ExtractTextPlugin('[name].[chunkhash].css'),
+            new ExtractTextPlugin('style.[chunkhash].css'),
 
             /**
              * Plugin: CommonsChunkPlugin
