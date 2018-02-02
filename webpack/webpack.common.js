@@ -8,6 +8,7 @@ const CommonsChunkPlugin = require('webpack/lib/optimize/CommonsChunkPlugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 const helpers = require('./helpers');
 
@@ -18,12 +19,13 @@ const helpers = require('./helpers');
  */
 module.exports = function (options) {
     const isProd = options.env === 'production';
+    const isAOT = ['production'].indexOf(options.env) !== -1; // add AOT environment to Array
     const METADATA = Object.assign({}, options.metadata || {});
     
     const entry = {
-        polyfills: './app/polyfills.browser.ts',
-        main:      './app/index.ts',
-        inline:     './app/style.scss'
+        polyfills: isAOT ? './app/polyfills/AOT.ts' : './app/polyfills/JIT.ts',
+        main: './app/index.ts',
+        inline: './app/style.scss'
     };
     
     return {
@@ -46,6 +48,9 @@ module.exports = function (options) {
              * See: http://webpack.github.io/docs/configuration.html#resolve-extensions
              */
             extensions: ['.ts', '.js', '.json'],
+            alias: {
+                '~': helpers.root('app')
+            }
         },
         
         /**
@@ -58,12 +63,14 @@ module.exports = function (options) {
             rules: [
                 {
                     test: /(?:\.ngfactory\.js|\.ngstyle\.js|\.ts)$/,
-                    use: ['@angular-devkit/build-optimizer/webpack-loader', {
-                        loader: '@ngtools/webpack',
-                        options: {
-                            tsConfigPath: './tsconfig.json'
-                        }
-                    }]
+                    use: isAOT
+                        ? /* AOT */ ['@angular-devkit/build-optimizer/webpack-loader', {
+                            loader: '@ngtools/webpack',
+                            options: {
+                                tsConfigPath: './tsconfig.json'
+                            }
+                        }]
+                        : /* JIT */ ['awesome-typescript-loader', 'angular2-template-loader']
                 },
                 
                 /**
@@ -90,17 +97,22 @@ module.exports = function (options) {
                 /**
                  * global style
                  */
+                /*{
+                 test: /\.scss$/,
+                 include: [helpers.root('./app/style.scss'), helpers.root('./app/styles')],
+                 use: ['style-loader', 'css-loader', 'sass-loader'],
+                 },*/
                 {
                     test: /\.scss$/,
                     include: [helpers.root('./app/style.scss'), helpers.root('./app/styles')],
-                    use: isProd
-                        ? /* production */ ExtractTextPlugin.extract({
+                    use: isAOT
+                        ? /* AOT */ ExtractTextPlugin.extract({
                             fallback: 'style-loader',
                             use: ['css-loader', 'sass-loader']
                         })
-                        : /* development */ ['style-loader', 'css-loader', 'sass-loader']
+                        : /* JIT */ ['style-loader', 'css-loader', 'sass-loader']
                 },
-
+                
                 /**
                  * html use raw-loader
                  */
@@ -167,7 +179,7 @@ module.exports = function (options) {
                 name: 'main',
                 async: 'common',
                 children: true,
-                minChunks: 2
+                minChunks: 1
             }),
             new CommonsChunkPlugin({
                 name: 'vendor',
@@ -188,7 +200,7 @@ module.exports = function (options) {
                 minChunks: Infinity,
                 name: 'inline'
             }),
-    
+            
             // generate index.html
             new HtmlWebpackPlugin({
                 template: helpers.root('app/index.html'),
@@ -198,6 +210,9 @@ module.exports = function (options) {
                 }
             }),
             
+            // for analyzing
+            new BundleAnalyzerPlugin({ analyzerPort: 8085 }),
+    
             /**
              * copy assets
              */

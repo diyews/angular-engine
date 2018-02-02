@@ -8,6 +8,8 @@ import { Component } from '@angular/core';
 @Component({
     selector: 'app-root',
     template: `
+        <a routerLink="/school" routerLinkActive="active">school Center</a>
+        <a routerLink="/park" routerLinkActive="active">park</a>
         <router-outlet></router-outlet>
     `
 })

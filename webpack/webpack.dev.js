@@ -1,7 +1,5 @@
 const webpack = require('webpack');
 const webpackMerge = require('webpack-merge');
-// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-const AngularCompilerPlugin = require('@ngtools/webpack').AngularCompilerPlugin;
 const helpers = require('./helpers');
 
 const commonConfig = require('./webpack.common.js'); // the settings that are common to prod and dev
@@ -20,17 +18,10 @@ module.exports = function() {
             // Add '.ts' and '.tsx' as resolvable extensions.
             extensions: ['.ts', '.tsx', '.js', '.json']
         },
-        // target: 'electron-renderer',
         plugins: [
-            new AngularCompilerPlugin({
-                tsConfigPath: './tsconfig.json',
-                entryModule: './app/app.module#AppModule',
-                sourceMap: true
-            }),
             new webpack.HotModuleReplacementPlugin({
                 // options
             }),
-            // new BundleAnalyzerPlugin({ analyzerPort: 8085, openAnalyzer: false }),
 
             // Workaround for angular/angular#11580
             new webpack.ContextReplacementPlugin(
@@ -51,6 +42,7 @@ module.exports = function() {
         devServer: {
             // host: '0.0.0.0',
             port: DEV_SERVER_PORT,
+            historyApiFallback: true,
             hot: true,
             overlay: true
         }
