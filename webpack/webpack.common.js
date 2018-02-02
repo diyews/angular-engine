@@ -6,7 +6,8 @@
 const DefinePlugin = require('webpack/lib/DefinePlugin');
 const CommonsChunkPlugin = require('webpack/lib/optimize/CommonsChunkPlugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-// const ngcWebpack = require('ngc-webpack');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 const helpers = require('./helpers');
 
@@ -22,13 +23,8 @@ module.exports = function (options) {
     const entry = {
         polyfills: './app/polyfills.browser.ts',
         main:      './app/index.ts',
-        style:     './app/style.scss'
+        inline:     './app/style.scss'
     };
-    
-    /*Object.assign(ngcWebpackConfig.plugin, {
-        tsConfigPath: METADATA.tsConfigPath,
-        mainPath: entry.main
-    });*/
     
     return {
         /**
@@ -60,20 +56,9 @@ module.exports = function (options) {
         module: {
             
             rules: [
-                // ...ngcWebpackConfig.loaders,
-                
-                /*{
-                    test: /\.tsx?$/,
-                    loaders: [
-                        {
-                            loader: 'awesome-typescript-loader',
-                            options: { configFileName: helpers.root('tsconfig.json') }
-                        }
-                    ]
-                },*/
                 {
                     test: /(?:\.ngfactory\.js|\.ngstyle\.js|\.ts)$/,
-                    use: [{
+                    use: ['@angular-devkit/build-optimizer/webpack-loader', {
                         loader: '@ngtools/webpack',
                         options: {
                             tsConfigPath: './tsconfig.json'
@@ -108,7 +93,12 @@ module.exports = function (options) {
                 {
                     test: /\.scss$/,
                     include: [helpers.root('./app/style.scss'), helpers.root('./app/styles')],
-                    use: ['style-loader', 'css-loader', 'sass-loader'],
+                    use: isProd
+                        ? /* production */ ExtractTextPlugin.extract({
+                            fallback: 'style-loader',
+                            use: ['css-loader', 'sass-loader']
+                        })
+                        : /* development */ ['style-loader', 'css-loader', 'sass-loader']
                 },
 
                 /**
@@ -121,8 +111,7 @@ module.exports = function (options) {
             ],
             
         },
-    
-    
+        
         /**
          * Include polyfills or mocks for various node stuff
          * Description: Node configuration
@@ -204,13 +193,17 @@ module.exports = function (options) {
             new HtmlWebpackPlugin({
                 template: helpers.root('app/index.html'),
                 chunksSortMode(a, b) {
-                    const order = ['inline', 'style', 'vendor', 'polyfills', 'main'];
+                    const order = ['inline', 'vendor', 'polyfills', 'main'];
                     return order.indexOf(a.names[0]) - order.indexOf(b.names[0]);
                 }
-            })
+            }),
             
-            // new ngcWebpack.NgcWebpackPlugin(ngcWebpackConfig.plugin),
+            /**
+             * copy assets
+             */
+            /*new CopyWebpackPlugin([
+             { from: helpers.root('app/assets') }
+             ])*/
         ]
-        
     };
 };
