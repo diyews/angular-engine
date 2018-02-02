@@ -6,8 +6,9 @@
 const webpackMerge = require('webpack-merge');
 const commonConfig = require('./webpack.common');
 const AngularCompilerPlugin = require('@ngtools/webpack').AngularCompilerPlugin;
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const CleanWebpackPlugin = require('clean-webpack-plugin');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
 const helpers = require('./helpers');
 
 const env = process.env.NODE_ENV;
@@ -26,13 +27,18 @@ module.exports = function () { /* ... */
             new AngularCompilerPlugin({
                 tsConfigPath: './tsconfig.json',
                 entryModule: './app/app.module#AppModule',
-                sourceMap: true
+                sourceMap: false
             }),
+            
+            new UglifyJsPlugin(),
 
             new CleanWebpackPlugin(['output'], {root: helpers.root()}),
 
             // production bundle analyze
-            // new BundleAnalyzerPlugin({ analyzerPort: 8085, openAnalyzer: false })
-        ]
+            new BundleAnalyzerPlugin({ analyzerPort: 8085, openAnalyzer: false })
+        ],
+        node: {
+            buffer: false
+        }
     });
 };

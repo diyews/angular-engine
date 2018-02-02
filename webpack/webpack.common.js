@@ -6,7 +6,7 @@
 const DefinePlugin = require('webpack/lib/DefinePlugin');
 const CommonsChunkPlugin = require('webpack/lib/optimize/CommonsChunkPlugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-// const ngcWebpack = require('ngc-webpack');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const helpers = require('./helpers');
 
@@ -24,11 +24,6 @@ module.exports = function (options) {
         main:      './app/index.ts',
         style:     './app/style.scss'
     };
-    
-    /*Object.assign(ngcWebpackConfig.plugin, {
-        tsConfigPath: METADATA.tsConfigPath,
-        mainPath: entry.main
-    });*/
     
     return {
         /**
@@ -73,7 +68,7 @@ module.exports = function (options) {
                 },*/
                 {
                     test: /(?:\.ngfactory\.js|\.ngstyle\.js|\.ts)$/,
-                    use: [{
+                    use: ['@angular-devkit/build-optimizer/webpack-loader', {
                         loader: '@ngtools/webpack',
                         options: {
                             tsConfigPath: './tsconfig.json'
@@ -207,10 +202,14 @@ module.exports = function (options) {
                     const order = ['inline', 'style', 'vendor', 'polyfills', 'main'];
                     return order.indexOf(a.names[0]) - order.indexOf(b.names[0]);
                 }
-            })
-            
-            // new ngcWebpack.NgcWebpackPlugin(ngcWebpackConfig.plugin),
+            }),
+    
+            /**
+             * copy assets
+             */
+            /*new CopyWebpackPlugin([
+                { from: helpers.root('app/assets') }
+            ])*/
         ]
-        
     };
 };
