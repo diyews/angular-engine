@@ -1,0 +1,210 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+
+  font-family: '微软雅黑', Arial, sans-serif;
+}
+
+/*
+::-webkit-scrollbar {
+  width: 4px;
+  background: #f8f8f8;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c4c4c4;
+}
+*/
+
+.fill-in {
+  width: 100%;
+  height: 100%;
+}
+
+/*!LOTUS*/
+.row {
+  &:before {
+    content: " ";
+    display: table
+  }
+
+  &:after {
+    clear: both
+  }
+}
+
+.col, .col-sm, .col-lg {
+  background-clip: content-box;
+  box-sizing: border-box;
+  display: inline-block;
+  margin-right: -.25em;
+  min-height: 1px;
+  padding-left: 1.25em;
+  position: relative;
+  vertical-align: top
+}
+
+.no-gutter {
+  padding-left: .25em
+}
+
+.c12 {
+  width: 100%
+}
+
+.c11 {
+  width: 91.66%
+}
+
+.c10 {
+  width: 83.33%
+}
+
+.c9 {
+  width: 75%
+}
+
+.c8 {
+  width: 66.66%
+}
+
+.c7 {
+  width: 58.33%
+}
+
+.c6 {
+  width: 50%
+}
+
+.c5 {
+  width: 41.66%
+}
+
+.c4 {
+  width: 33.33%
+}
+
+.c3 {
+  width: 25%
+}
+
+.c2 {
+  width: 16.66%
+}
+
+.c1 {
+  width: 8.33%
+}
+
+@media (max-width: 55em) {
+  .col-lg {
+    width: 100%;
+    margin-bottom: 1.25em
+  }
+}
+
+@media (max-width: 30em) {
+  .col {
+    width: 100%;
+    margin-bottom: 1.25em
+  }
+}
+
+.text-left {
+  text-align: left;
+}
+
+.text-center {
+  text-align: center
+}
+
+.text-right {
+  text-align: right
+}
+
+.text-justify {
+  text-align: justify
+}
+
+.text-upper {
+  text-transform: uppercase
+}
+
+.text-light {
+  font-weight: 300
+}
+
+.text-bold {
+  font-weight: 700
+}
+
+.text-lg {
+  font-size: 1.2em
+}
+
+.inline {
+  display: inline-block
+}
+
+.block {
+  display: block
+}
+
+.fl-right {
+  float: right
+}
+
+.fl-left {
+  float: left
+}
+
+.clearfix:before {
+  content: " ";
+  display: table
+}
+
+.clearfix:after {
+  clear: both
+}
+
+.nowrap {
+  white-space: nowrap
+}
+
+.hide {
+  display: none !important
+}
+
+// background color
+.bg-white {
+  background: #fff;
+}
+
+// padding
+
+
+.pd5 {
+  padding: 5px !important;
+}
+
+.pd10 {
+  padding: 10px !important;
+}
+
+.pdl5 {
+  padding-left: 5px !important;
+}
+
+.pdl10 {
+  padding-left: 10px !important;
+}
+
+.xpd5 {
+  padding: 0 5px !important;
+}

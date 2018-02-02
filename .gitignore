@@ -1,0 +1,12 @@
+#directories
+bower_components
+node_modules
+dist
+output
+
+#IDE
+.idea
+
+#files
+*.tgz
+*.log
