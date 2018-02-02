@@ -42,6 +42,7 @@ module.exports = function() {
         devServer: {
             // host: '0.0.0.0',
             port: DEV_SERVER_PORT,
+            historyApiFallback: true,
             hot: true,
             overlay: true
         }
