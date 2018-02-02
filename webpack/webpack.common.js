@@ -46,6 +46,9 @@ module.exports = function (options) {
              * See: http://webpack.github.io/docs/configuration.html#resolve-extensions
              */
             extensions: ['.ts', '.js', '.json'],
+            alias: {
+                '~': helpers.root('app')
+            }
         },
         
         /**
