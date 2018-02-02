@@ -5,16 +5,19 @@
  */
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { RouterModule } from "@angular/router";
 import { AppComponent } from './app.component';
 import { HomeComponent } from './lighthouse/home/home.component';
+import { SchoolModule } from './lighthouse/school/school.module';
+import { AppRoutingModule } from './app-routing.module';
+import { PackModule } from './lighthouse/park/park.module';
 
 @NgModule({
     imports: [
         BrowserModule,
-        RouterModule.forRoot([
-            { path: '', component: HomeComponent }
-        ]),
+
+        SchoolModule,
+        PackModule,
+        AppRoutingModule
     ],
     declarations: [
         AppComponent,
