@@ -6,7 +6,6 @@
 const DefinePlugin = require('webpack/lib/DefinePlugin');
 const CommonsChunkPlugin = require('webpack/lib/optimize/CommonsChunkPlugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 const helpers = require('./helpers');
@@ -59,6 +58,16 @@ module.exports = function (options) {
         module: {
             
             rules: [
+                /**
+                 * tslint
+                 */
+                {
+                    test: /\.ts$/,
+                    enforce: 'pre',
+                    loader: 'tslint-loader',
+                    options: { /* Loader options go here */ }
+                },
+
                 {
                     test: /(?:\.ngfactory\.js|\.ngstyle\.js|\.ts)$/,
                     use: ['@angular-devkit/build-optimizer/webpack-loader', {
