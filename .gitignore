@@ -10,3 +10,6 @@ output
 #files
 *.tgz
 *.log
+
+#testing
+coverage

@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 
-import { SchoolComponent } from './components/school.component';
+import { SchoolComponent } from './school.component';
 import { SchoolRoutingModule } from './school-routing.module';
 
 @NgModule({
