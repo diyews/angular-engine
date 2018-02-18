@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { SchoolComponent } from './components/school.component';
+import { SchoolComponent } from './school.component';
 
 @NgModule({
     imports: [
