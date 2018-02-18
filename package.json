@@ -4,8 +4,8 @@
   "description": "An engine can be used to build and launch a rocket.",
   "scripts": {
     "start": "npm run serve",
-    "serve": "cross-env NODE_ENV=development webpack-dev-server --config ./webpack/webpack.dev.js",
-    "build": "cross-env NODE_ENV=production webpack --config ./webpack/webpack.prod.js",
+    "serve": "cross-env NODE_ENV=development webpack-dev-server --config ./config/webpack.dev.js",
+    "build": "cross-env NODE_ENV=production webpack --config ./config/webpack.prod.js",
     "test": "karma start --single-run",
     "test:debug": "karma start"
   },
