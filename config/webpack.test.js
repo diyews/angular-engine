@@ -1,5 +1,5 @@
 const webpack = require('webpack');
-const helpers = require('../webpack/helpers');
+const helpers = require('./helpers');
 
 module.exports = {
     devtool: 'inline-source-map',
