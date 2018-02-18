@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { ParkComponent } from './components/park.component';
+import { ParkComponent } from './park.component';
 
 @NgModule({
     imports: [
