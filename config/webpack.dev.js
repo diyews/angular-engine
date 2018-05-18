@@ -9,6 +9,7 @@ module.exports = function() {
     const ENV = process.env.ENV = process.env.NODE_ENV = 'development';
     
     return webpackMerge(commonConfig({ env: ENV }), {
+        mode: 'development',
         output: {
             filename: '[name].bundle.js',
         },
