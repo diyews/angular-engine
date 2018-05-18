@@ -16,6 +16,7 @@ const ENV = process.env.NODE_ENV;
 
 module.exports = function () { /* ... */
     return webpackMerge(commonConfig({env: ENV, metadata: { ENV }}), {
+        mode: 'production',
         output: {
             path: helpers.root('output'),
             filename: '[name].[chunkhash].bundle.js'
