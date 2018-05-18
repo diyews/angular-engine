@@ -171,9 +171,9 @@ module.exports = function (options) {
             /**
              * copy assets
              */
-            /*new CopyWebpackPlugin([
-             { from: helpers.root('app/assets') }
-             ])*/
+            new CopyWebpackPlugin([
+                {from: helpers.root('app/assets'), to: 'assets'}
+            ]),
         ],
         optimization: {
             splitChunks: {
