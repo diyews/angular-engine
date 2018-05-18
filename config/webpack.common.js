@@ -4,9 +4,8 @@
  * Version 1.0.0
  */
 const DefinePlugin = require('webpack/lib/DefinePlugin');
-const CommonsChunkPlugin = require('webpack/lib/optimize/CommonsChunkPlugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 const helpers = require('./helpers');
 
@@ -22,7 +21,7 @@ module.exports = function (options) {
     const entry = {
         polyfills: './app/polyfills.browser.ts',
         main:      './app/index.ts',
-        inline:     './app/style.scss'
+        inline:    './app/style.scss'
     };
     
     return {
@@ -106,13 +105,10 @@ module.exports = function (options) {
                     test: /\.scss$/,
                     include: [helpers.root('./app/style.scss'), helpers.root('./app/styles')],
                     use: isProd
-                        ? /* production */ ExtractTextPlugin.extract({
-                            fallback: 'style-loader',
-                            use: ['css-loader', 'sass-loader']
-                        })
+                        ? /* production */ MiniCssExtractPlugin.loader
                         : /* development */ ['style-loader', 'css-loader', 'sass-loader']
                 },
-
+                
                 /**
                  * html use raw-loader
                  */
@@ -163,44 +159,6 @@ module.exports = function (options) {
                 'process.env.HMR': METADATA.HMR
             }),
 
-            /**
-             * Plugin: CommonsChunkPlugin
-             * Description: Shares common code between the pages.
-             * It identifies common modules and put them into a commons chunk.
-             *
-             * See: https://webpack.github.io/docs/list-of-plugins.html#commonschunkplugin
-             * See: https://github.com/webpack/docs/wiki/optimization#multi-page-app
-             */
-            new CommonsChunkPlugin({
-                name: 'polyfills',
-                chunks: ['polyfills']
-            }),
-            new CommonsChunkPlugin({
-                name: 'main',
-                async: 'common',
-                children: true,
-                minChunks: 2
-            }),
-            new CommonsChunkPlugin({
-                name: 'vendor',
-                chunks: ['main'],
-                minChunks(module, count) {
-                    const context = module.context;
-                    // console.log(context);
-                    // const targets = ['(\\|/)@angular(\\|/)'];
-                    // return context && context.indexOf('node_modules') >= 0 && targets.filter(t => new RegExp('(\\\\|/)' + '@angular' + '(\\\\|/)', 'i').test(context));
-                    return context && context.indexOf('node_modules') >= 0;
-                }
-            }),
-            new CommonsChunkPlugin({
-                name: 'vendor',
-                chunks: ['vendor', 'polyfills']
-            }),
-            new CommonsChunkPlugin({
-                minChunks: Infinity,
-                name: 'inline'
-            }),
-    
             // generate index.html
             new HtmlWebpackPlugin({
                 template: helpers.root('app/index.html'),
@@ -216,6 +174,23 @@ module.exports = function (options) {
             /*new CopyWebpackPlugin([
              { from: helpers.root('app/assets') }
              ])*/
-        ]
+        ],
+        optimization: {
+            splitChunks: {
+                chunks: 'all',
+                minSize: 3e4,
+                minChunks: 1,
+                maxAsyncRequests: 5,
+                maxInitialRequests: 3,
+                automaticNameDelimiter: '~',
+                name: true,
+                cacheGroups: {
+                    vendor: {
+                        test: /[\\/]node_modules[\\/]/,
+                        priority: -10,
+                    },
+                },
+            },
+        },
     };
 };

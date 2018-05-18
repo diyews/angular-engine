@@ -8,7 +8,7 @@ const commonConfig = require('./webpack.common');
 const AngularCompilerPlugin = require('@ngtools/webpack').AngularCompilerPlugin;
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
-const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 const helpers = require('./helpers');
 
@@ -31,7 +31,7 @@ module.exports = function () { /* ... */
                 sourceMap: false
             }),
             
-            new ExtractTextPlugin('style.[chunkhash].css'),
+            new MiniCssExtractPlugin({ filename: 'style.[chunkhash].css' }),
     
             new UglifyJsPlugin(),
 
